@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="187aecc1b43948ca9e1f0dc9d9067995" Name="Diagram1">
+        <EntityTypeShape EntityType="UMAIDModel.Address" Width="1.5" PointX="3" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="UMAIDModel.CleaningLevel" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UMAIDModel.Listing" Width="1.5" PointX="7.5" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="UMAIDModel.Person" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="UMAIDModel.Property" Width="1.5" PointX="5.25" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="UMAIDModel.PropertyInfo" Width="1.5" PointX="7.5" PointY="7" IsExpanded="true" />
+        <AssociationConnector Association="UMAIDModel.FK_AddressProperties" ManuallyRouted="false" />
+        <AssociationConnector Association="UMAIDModel.FK_PersonAddressses" ManuallyRouted="false" />
+        <AssociationConnector Association="UMAIDModel.FK_CleaningLevelListing" ManuallyRouted="false" />
+        <AssociationConnector Association="UMAIDModel.FK_PersonListing" ManuallyRouted="false" />
+        <AssociationConnector Association="UMAIDModel.FK_PropertiesListing" ManuallyRouted="false" />
+        <AssociationConnector Association="UMAIDModel.FK_PersonProperties" ManuallyRouted="false" />
+        <AssociationConnector Association="UMAIDModel.FK_PropertiesPropertiesInfo" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

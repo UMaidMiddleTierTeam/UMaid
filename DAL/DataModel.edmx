@@ -1,0 +1,512 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="UMAIDModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Addresses">
+          <Key>
+            <PropertyRef Name="AddressID" />
+          </Key>
+          <Property Name="AddressID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="personID" Type="int" Nullable="false" />
+          <Property Name="propertyID" Type="int" />
+          <Property Name="line1" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="line2" Type="varchar" MaxLength="50" />
+          <Property Name="city" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="state" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="zip" Type="int" Nullable="false" />
+          <Property Name="country" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CleaningLevels">
+          <Key>
+            <PropertyRef Name="CleaningLevelID" />
+          </Key>
+          <Property Name="CleaningLevelID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Listing">
+          <Key>
+            <PropertyRef Name="listingID" />
+          </Key>
+          <Property Name="listingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="personID" Type="int" Nullable="false" />
+          <Property Name="propertyID" Type="int" Nullable="false" />
+          <Property Name="listingStartTime" Type="datetime" />
+          <Property Name="listingExpiryTime" Type="datetime" />
+          <Property Name="cleaningLevelID" Type="int" />
+          <Property Name="additionalInfo" Type="varchar" MaxLength="200" />
+          <Property Name="isLive" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Persons">
+          <Key>
+            <PropertyRef Name="personID" />
+          </Key>
+          <Property Name="personID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FName" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LName" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="EmailID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="passWord" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="UserType" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Properties">
+          <Key>
+            <PropertyRef Name="PropertyID" />
+          </Key>
+          <Property Name="PropertyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonID" Type="int" Nullable="false" />
+          <Property Name="AddressID" Type="int" Nullable="false" />
+          <Property Name="isVacant" Type="int" />
+          <Property Name="hasPets" Type="int" />
+        </EntityType>
+        <EntityType Name="PropertyInfo">
+          <Key>
+            <PropertyRef Name="propertyInfoID" />
+          </Key>
+          <Property Name="propertyInfoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="propertyID" Type="int" Nullable="false" />
+          <Property Name="numBedrooms" Type="int" />
+          <Property Name="numBathrooms" Type="int" />
+          <Property Name="size" Type="int" />
+          <Property Name="priceLight" Type="float" />
+          <Property Name="priceMedium" Type="float" />
+          <Property Name="priceHeavy" Type="float" />
+          <Property Name="description" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <Association Name="FK_AddressProperties">
+          <End Role="Addresses" Type="Self.Addresses" Multiplicity="1" />
+          <End Role="Properties" Type="Self.Properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Addresses">
+              <PropertyRef Name="AddressID" />
+            </Principal>
+            <Dependent Role="Properties">
+              <PropertyRef Name="AddressID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CleaningLevelListing">
+          <End Role="CleaningLevels" Type="Self.CleaningLevels" Multiplicity="0..1" />
+          <End Role="Listing" Type="Self.Listing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CleaningLevels">
+              <PropertyRef Name="CleaningLevelID" />
+            </Principal>
+            <Dependent Role="Listing">
+              <PropertyRef Name="cleaningLevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonAddressses">
+          <End Role="Persons" Type="Self.Persons" Multiplicity="1" />
+          <End Role="Addresses" Type="Self.Addresses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="personID" />
+            </Principal>
+            <Dependent Role="Addresses">
+              <PropertyRef Name="personID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonListing">
+          <End Role="Persons" Type="Self.Persons" Multiplicity="1" />
+          <End Role="Listing" Type="Self.Listing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="personID" />
+            </Principal>
+            <Dependent Role="Listing">
+              <PropertyRef Name="personID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonProperties">
+          <End Role="Persons" Type="Self.Persons" Multiplicity="1" />
+          <End Role="Properties" Type="Self.Properties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="personID" />
+            </Principal>
+            <Dependent Role="Properties">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PropertiesListing">
+          <End Role="Properties" Type="Self.Properties" Multiplicity="1" />
+          <End Role="Listing" Type="Self.Listing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Properties">
+              <PropertyRef Name="PropertyID" />
+            </Principal>
+            <Dependent Role="Listing">
+              <PropertyRef Name="propertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PropertiesPropertiesInfo">
+          <End Role="Properties" Type="Self.Properties" Multiplicity="1" />
+          <End Role="PropertyInfo" Type="Self.PropertyInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Properties">
+              <PropertyRef Name="PropertyID" />
+            </Principal>
+            <Dependent Role="PropertyInfo">
+              <PropertyRef Name="propertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="UMAIDModelStoreContainer">
+          <EntitySet Name="Addresses" EntityType="Self.Addresses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CleaningLevels" EntityType="Self.CleaningLevels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Listing" EntityType="Self.Listing" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Persons" EntityType="Self.Persons" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Properties" EntityType="Self.Properties" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PropertyInfo" EntityType="Self.PropertyInfo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AddressProperties" Association="Self.FK_AddressProperties">
+            <End Role="Addresses" EntitySet="Addresses" />
+            <End Role="Properties" EntitySet="Properties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CleaningLevelListing" Association="Self.FK_CleaningLevelListing">
+            <End Role="CleaningLevels" EntitySet="CleaningLevels" />
+            <End Role="Listing" EntitySet="Listing" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonAddressses" Association="Self.FK_PersonAddressses">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="Addresses" EntitySet="Addresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonListing" Association="Self.FK_PersonListing">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="Listing" EntitySet="Listing" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonProperties" Association="Self.FK_PersonProperties">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="Properties" EntitySet="Properties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PropertiesListing" Association="Self.FK_PropertiesListing">
+            <End Role="Properties" EntitySet="Properties" />
+            <End Role="Listing" EntitySet="Listing" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PropertiesPropertiesInfo" Association="Self.FK_PropertiesPropertiesInfo">
+            <End Role="Properties" EntitySet="Properties" />
+            <End Role="PropertyInfo" EntitySet="PropertyInfo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="UMAIDModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="AddressID" />
+          </Key>
+          <Property Name="AddressID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="personID" Type="Int32" Nullable="false" />
+          <Property Name="propertyID" Type="Int32" />
+          <Property Name="line1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="line2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="city" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="state" Type="String" MaxLength="2" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="zip" Type="Int32" Nullable="false" />
+          <Property Name="country" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Properties" Relationship="Self.FK_AddressProperties" FromRole="Addresses" ToRole="Properties" />
+          <NavigationProperty Name="Person" Relationship="Self.FK_PersonAddressses" FromRole="Addresses" ToRole="Persons" />
+        </EntityType>
+        <EntityType Name="CleaningLevel">
+          <Key>
+            <PropertyRef Name="CleaningLevelID" />
+          </Key>
+          <Property Name="CleaningLevelID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Listings" Relationship="Self.FK_CleaningLevelListing" FromRole="CleaningLevels" ToRole="Listing" />
+        </EntityType>
+        <EntityType Name="Listing">
+          <Key>
+            <PropertyRef Name="listingID" />
+          </Key>
+          <Property Name="listingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="personID" Type="Int32" Nullable="false" />
+          <Property Name="propertyID" Type="Int32" Nullable="false" />
+          <Property Name="listingStartTime" Type="DateTime" Precision="3" />
+          <Property Name="listingExpiryTime" Type="DateTime" Precision="3" />
+          <Property Name="cleaningLevelID" Type="Int32" />
+          <Property Name="additionalInfo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="isLive" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CleaningLevel" Relationship="Self.FK_CleaningLevelListing" FromRole="Listing" ToRole="CleaningLevels" />
+          <NavigationProperty Name="Person" Relationship="Self.FK_PersonListing" FromRole="Listing" ToRole="Persons" />
+          <NavigationProperty Name="Property" Relationship="Self.FK_PropertiesListing" FromRole="Listing" ToRole="Properties" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="personID" />
+          </Key>
+          <Property Name="personID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmailID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="passWord" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserType" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Addresses" Relationship="Self.FK_PersonAddressses" FromRole="Persons" ToRole="Addresses" />
+          <NavigationProperty Name="Listings" Relationship="Self.FK_PersonListing" FromRole="Persons" ToRole="Listing" />
+          <NavigationProperty Name="Properties" Relationship="Self.FK_PersonProperties" FromRole="Persons" ToRole="Properties" />
+        </EntityType>
+        <EntityType Name="Property">
+          <Key>
+            <PropertyRef Name="PropertyID" />
+          </Key>
+          <Property Name="PropertyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="AddressID" Type="Int32" Nullable="false" />
+          <Property Name="isVacant" Type="Int32" />
+          <Property Name="hasPets" Type="Int32" />
+          <NavigationProperty Name="Address" Relationship="Self.FK_AddressProperties" FromRole="Properties" ToRole="Addresses" />
+          <NavigationProperty Name="Listings" Relationship="Self.FK_PropertiesListing" FromRole="Properties" ToRole="Listing" />
+          <NavigationProperty Name="Person" Relationship="Self.FK_PersonProperties" FromRole="Properties" ToRole="Persons" />
+          <NavigationProperty Name="PropertyInfoes" Relationship="Self.FK_PropertiesPropertiesInfo" FromRole="Properties" ToRole="PropertyInfo" />
+        </EntityType>
+        <EntityType Name="PropertyInfo">
+          <Key>
+            <PropertyRef Name="propertyInfoID" />
+          </Key>
+          <Property Name="propertyInfoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="propertyID" Type="Int32" Nullable="false" />
+          <Property Name="numBedrooms" Type="Int32" />
+          <Property Name="numBathrooms" Type="Int32" />
+          <Property Name="size" Type="Int32" />
+          <Property Name="priceLight" Type="Double" />
+          <Property Name="priceMedium" Type="Double" />
+          <Property Name="priceHeavy" Type="Double" />
+          <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Property" Relationship="Self.FK_PropertiesPropertiesInfo" FromRole="PropertyInfo" ToRole="Properties" />
+        </EntityType>
+        <Association Name="FK_AddressProperties">
+          <End Role="Addresses" Type="Self.Address" Multiplicity="1" />
+          <End Role="Properties" Type="Self.Property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Addresses">
+              <PropertyRef Name="AddressID" />
+            </Principal>
+            <Dependent Role="Properties">
+              <PropertyRef Name="AddressID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonAddressses">
+          <End Role="Persons" Type="Self.Person" Multiplicity="1" />
+          <End Role="Addresses" Type="Self.Address" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="personID" />
+            </Principal>
+            <Dependent Role="Addresses">
+              <PropertyRef Name="personID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CleaningLevelListing">
+          <End Role="CleaningLevels" Type="Self.CleaningLevel" Multiplicity="0..1" />
+          <End Role="Listing" Type="Self.Listing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CleaningLevels">
+              <PropertyRef Name="CleaningLevelID" />
+            </Principal>
+            <Dependent Role="Listing">
+              <PropertyRef Name="cleaningLevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonListing">
+          <End Role="Persons" Type="Self.Person" Multiplicity="1" />
+          <End Role="Listing" Type="Self.Listing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="personID" />
+            </Principal>
+            <Dependent Role="Listing">
+              <PropertyRef Name="personID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PropertiesListing">
+          <End Role="Properties" Type="Self.Property" Multiplicity="1" />
+          <End Role="Listing" Type="Self.Listing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Properties">
+              <PropertyRef Name="PropertyID" />
+            </Principal>
+            <Dependent Role="Listing">
+              <PropertyRef Name="propertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonProperties">
+          <End Role="Persons" Type="Self.Person" Multiplicity="1" />
+          <End Role="Properties" Type="Self.Property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persons">
+              <PropertyRef Name="personID" />
+            </Principal>
+            <Dependent Role="Properties">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PropertiesPropertiesInfo">
+          <End Role="Properties" Type="Self.Property" Multiplicity="1" />
+          <End Role="PropertyInfo" Type="Self.PropertyInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Properties">
+              <PropertyRef Name="PropertyID" />
+            </Principal>
+            <Dependent Role="PropertyInfo">
+              <PropertyRef Name="propertyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="UMAIDEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Addresses" EntityType="Self.Address" />
+          <EntitySet Name="CleaningLevels" EntityType="Self.CleaningLevel" />
+          <EntitySet Name="Listings" EntityType="Self.Listing" />
+          <EntitySet Name="Persons" EntityType="Self.Person" />
+          <EntitySet Name="Properties" EntityType="Self.Property" />
+          <EntitySet Name="PropertyInfoes" EntityType="Self.PropertyInfo" />
+          <AssociationSet Name="FK_AddressProperties" Association="Self.FK_AddressProperties">
+            <End Role="Addresses" EntitySet="Addresses" />
+            <End Role="Properties" EntitySet="Properties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonAddressses" Association="Self.FK_PersonAddressses">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="Addresses" EntitySet="Addresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CleaningLevelListing" Association="Self.FK_CleaningLevelListing">
+            <End Role="CleaningLevels" EntitySet="CleaningLevels" />
+            <End Role="Listing" EntitySet="Listings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonListing" Association="Self.FK_PersonListing">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="Listing" EntitySet="Listings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PropertiesListing" Association="Self.FK_PropertiesListing">
+            <End Role="Properties" EntitySet="Properties" />
+            <End Role="Listing" EntitySet="Listings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonProperties" Association="Self.FK_PersonProperties">
+            <End Role="Persons" EntitySet="Persons" />
+            <End Role="Properties" EntitySet="Properties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PropertiesPropertiesInfo" Association="Self.FK_PropertiesPropertiesInfo">
+            <End Role="Properties" EntitySet="Properties" />
+            <End Role="PropertyInfo" EntitySet="PropertyInfoes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="UMAIDModelStoreContainer" CdmEntityContainer="UMAIDEntities">
+          <EntitySetMapping Name="Addresses">
+            <EntityTypeMapping TypeName="UMAIDModel.Address">
+              <MappingFragment StoreEntitySet="Addresses">
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+                <ScalarProperty Name="personID" ColumnName="personID" />
+                <ScalarProperty Name="propertyID" ColumnName="propertyID" />
+                <ScalarProperty Name="line1" ColumnName="line1" />
+                <ScalarProperty Name="line2" ColumnName="line2" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="zip" ColumnName="zip" />
+                <ScalarProperty Name="country" ColumnName="country" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CleaningLevels">
+            <EntityTypeMapping TypeName="UMAIDModel.CleaningLevel">
+              <MappingFragment StoreEntitySet="CleaningLevels">
+                <ScalarProperty Name="CleaningLevelID" ColumnName="CleaningLevelID" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Listings">
+            <EntityTypeMapping TypeName="UMAIDModel.Listing">
+              <MappingFragment StoreEntitySet="Listing">
+                <ScalarProperty Name="listingID" ColumnName="listingID" />
+                <ScalarProperty Name="personID" ColumnName="personID" />
+                <ScalarProperty Name="propertyID" ColumnName="propertyID" />
+                <ScalarProperty Name="listingStartTime" ColumnName="listingStartTime" />
+                <ScalarProperty Name="listingExpiryTime" ColumnName="listingExpiryTime" />
+                <ScalarProperty Name="cleaningLevelID" ColumnName="cleaningLevelID" />
+                <ScalarProperty Name="additionalInfo" ColumnName="additionalInfo" />
+                <ScalarProperty Name="isLive" ColumnName="isLive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Persons">
+            <EntityTypeMapping TypeName="UMAIDModel.Person">
+              <MappingFragment StoreEntitySet="Persons">
+                <ScalarProperty Name="personID" ColumnName="personID" />
+                <ScalarProperty Name="FName" ColumnName="FName" />
+                <ScalarProperty Name="LName" ColumnName="LName" />
+                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+                <ScalarProperty Name="passWord" ColumnName="passWord" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Properties">
+            <EntityTypeMapping TypeName="UMAIDModel.Property">
+              <MappingFragment StoreEntitySet="Properties">
+                <ScalarProperty Name="PropertyID" ColumnName="PropertyID" />
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="AddressID" ColumnName="AddressID" />
+                <ScalarProperty Name="isVacant" ColumnName="isVacant" />
+                <ScalarProperty Name="hasPets" ColumnName="hasPets" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PropertyInfoes">
+            <EntityTypeMapping TypeName="UMAIDModel.PropertyInfo">
+              <MappingFragment StoreEntitySet="PropertyInfo">
+                <ScalarProperty Name="propertyInfoID" ColumnName="propertyInfoID" />
+                <ScalarProperty Name="propertyID" ColumnName="propertyID" />
+                <ScalarProperty Name="numBedrooms" ColumnName="numBedrooms" />
+                <ScalarProperty Name="numBathrooms" ColumnName="numBathrooms" />
+                <ScalarProperty Name="size" ColumnName="size" />
+                <ScalarProperty Name="priceLight" ColumnName="priceLight" />
+                <ScalarProperty Name="priceMedium" ColumnName="priceMedium" />
+                <ScalarProperty Name="priceHeavy" ColumnName="priceHeavy" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
